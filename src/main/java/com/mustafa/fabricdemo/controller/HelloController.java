@@ -1,4 +1,4 @@
-package com.mustafa.spotify.controller;
+package com.mustafa.fabricdemo.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,6 @@ public class HelloController {
 
      @GetMapping
     public ResponseEntity<String> getHello(){
-         return new ResponseEntity<>("Hello from spotify maven plugin demo", HttpStatus.OK);
+         return new ResponseEntity<>("Hello from jib maven plugin demo", HttpStatus.OK);
      }
 }

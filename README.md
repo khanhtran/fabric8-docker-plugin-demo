@@ -1,1 +1,1 @@
-# spotify-docker-plugin-demo
+# fabric-docker-plugin-demo

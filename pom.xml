@@ -1,41 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.mustafa</groupId>
-	<artifactId>spotify</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>docker</name>
-	<description>Demo project for Spring Boot</description>
-	<properties>
-		<java.version>17</java.version>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.6.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.mustafa</groupId>
+    <artifactId>fabricdemo</artifactId>
+    <version>0.0.1</version>
+    <name>sample-image</name>
+    <description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <mainClass>com.mustafa.fabricdemo.DockerApplication</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.mustafa.fabricdemo.DockerApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
 
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.39.0</version>
+                <configuration>
+                    <pushRegistry>localhost:5000</pushRegistry>
+                    <containerNamePattern>%n</containerNamePattern>
+                    <images>
+                        <image>
+                            <alias>maven-demo</alias>
+                            <name>my1795/docker-demo:${project.version}</name>
+                            <build>
+                                <from>openjdk:17-alpine</from>
+                                <assemblies>
+                                    <assembly>
+                                        <mode>dir</mode>
+                                        <descriptorRef>artifact</descriptorRef>
+                                    </assembly>
+                                </assemblies>
+                                <entryPoint>java -jar maven/${project.artifactId}-${project.version}.jar</entryPoint>
+                            </build>
+                            <run>
+                                <ports>
+                                    <port>8080:8080</port>
+                                </ports>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
