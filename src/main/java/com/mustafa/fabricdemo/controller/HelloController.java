@@ -10,6 +10,6 @@ public class HelloController {
 
      @GetMapping
     public ResponseEntity<String> getHello(){
-         return new ResponseEntity<>("Hello from jib maven plugin demo", HttpStatus.OK);
+         return new ResponseEntity<>("Hello from fabric8io maven plugin demo", HttpStatus.OK);
      }
 }

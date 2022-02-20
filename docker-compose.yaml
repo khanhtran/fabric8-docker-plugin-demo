@@ -4,13 +4,26 @@ services:
     image: registry:2
     restart: always
     networks:
-      - host-bridge
+      - registry-net
     ports:
       - 5000:5000
     volumes:
       - registry_data:/var/lib/registry
+  registr-web:
+    image: hyper/docker-registry-web:v0.1.2
+    networks:
+      - registry-net
+    ports:
+      - 8085:8080
+    depends_on:
+      - registry
+    environment:
+      - REGISTRY_URL=http://registry:5000/v2
+      - REGISTRY_TRUST_ANY_SSL=true
+      #     - REGISTRY_BASIC_AUTH="YWRtaW46Y2hhbmdlbWU="
+      - REGISTRY_NAME=registry:5000
 networks:
-  host-bridge:
+  registry-net:
     driver: bridge
 volumes:
   registry_data:
